@@ -1,71 +1,73 @@
 import 'package:flutter/material.dart';
-import './relogio.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final String url = 'https://jsonplaceholder.typicode.com';
+  final String recurso = '/users/1';
+  String json = '';
+  String varTeste = '';
+
+  _fazerRequisicao() async {
+    json = '';
+    var uri = Uri.parse(url + recurso);
+    var resposta = await get(uri);
+    setState(() {
+      if (resposta.statusCode == 200) {
+        json = resposta.body;
+      } else {
+        json = resposta.statusCode.toString();
+      }
+    });
+
+    var jsonResposta = jsonDecode(json);
+    varTeste = jsonResposta['phone'].toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       body: Container(
-        padding: EdgeInsets.only(top: 150, left: 30, right: 30),
+        color: Theme.of(context).primaryColor,
         child: Column(
           children: [
-            Row(
-              children: [
-                Text(
-                  'Olá, ',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                Text(
-                  'Genivaldo',
-                  style: Theme.of(context).textTheme.headline3,
-                ),
-              ],
+            SizedBox(
+              height: 100,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 240),
-              child: Column(
+            TextButton(
+              onPressed: () {
+                _fazerRequisicao();
+              },
+              child: Text(
+                'Solicitar Usuários',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              height: 600,
+              child: ListView(
+                padding: EdgeInsets.all(20),
                 children: [
                   Text(
-                    'Eu sou seu relógio de ponto.',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  Text(
-                    'Vamos começar o dia?',
-                    style: Theme.of(context).textTheme.headline5,
+                    json,
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 200),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return Relogio();
-                    },
-                  ));
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 250,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: Colors.indigo[50],
-                  ),
-                  child: Text(
-                    'Isso é um teste',
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        color: Colors.indigo[400],
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  ),
-                ),
-              ),
-            )
+            SizedBox(height: 10),
+            Text('ID: $varTeste'),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:relogio_ponto/views/relogio.dart';
 import './views/homepage.dart';
 
 void main() {
@@ -12,20 +13,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Meu Relógio de Ponto',
       home: HomePage(),
+      // routes: <String, WidgetBuilder>{
+      //   '/a': (BuildContext context) => Relogio()
+      // },
       theme: ThemeData(
         primaryColor: Colors.indigo[300],
-        fontFamily: 'Raleway',
-        textTheme: TextTheme(
-            headline5: TextStyle(
-              color: Colors.white,
-            ),
-            headline4: TextStyle(
-              color: Colors.white,
-            ),
-            headline3: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 38)),
       ),
     );
   }
